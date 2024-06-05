@@ -7,6 +7,8 @@ module JK(
     output Q,
     output Q_bar);
 
+    // 排成下面增值表的樣子比較好看Ｑ
+
 /*
   Truth Table
   -------------------------------------------------------------
@@ -30,16 +32,16 @@ assign Q_bar = ~q;
 
 // Sol1
 always @(negedge clk or posedge Preset or posedge Clear) begin
-        case({Preset,Clear})
-            2'b11: q <= q;      // nothing change
+        case({Preset, Clear})
+            2'b10: q <= 1'b1;   // Preset
             2'b01: q <= 1'b0;   // Clear Mode:Q is cleared to 0
-            2'b10: q <= 1'b1;
+            2'b11: q <= q;      // nothing change
             2'b00: begin
                 case({J, K})
-                    2'b00: q <= q; // Hold
+                    2'b00: q <= q;    // Hold
                     2'b01: q <= 1'b0; // Reset
                     2'b10: q <= 1'b1; // Set
-                    2'b11: q <= ~q; // Toggle
+                    2'b11: q <= ~q;   // Toggle
                 endcase
             end
         endcase

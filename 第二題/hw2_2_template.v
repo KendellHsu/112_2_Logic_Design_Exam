@@ -5,9 +5,12 @@ output QA, QB, QC, QD;
 
 // Preset
 wire w1, Preset, w2, Clear;
+// assign Preset = ~(R91 & R92)
 and(w1, R91, R92);
 not(Preset, w1);
-//Clear
+
+// Clear
+// assign Preset = ~(R01 & R02)
 and(w2, R01, R02);
 not(Clear, w2);
 
@@ -16,7 +19,8 @@ wire [3:0] Q_bar;
 JK jk1(1'd1, inputA, 1'd1, ~Preset, ~Clear, Q[0], Q_bar[0]);
 JK jk2(Q_bar[3], inputB, 1'd1, 1'd0, ~(Clear&Preset), Q[1], Q_bar[1]);
 JK jk3(1'd1, Q[1], 1'd1, 1'd0, ~(Clear&Preset), Q[2], Q_bar[2]);
-JK jk4((Q[1]& Q[2]), inputB,Q[3],  ~Preset, ~Clear,Q[3], Q_bar[3]);
+JK jk4((Q[1]&Q[2]), inputB,Q[3],  ~Preset, ~Clear, Q[3], Q_bar[3]);
+// notice : clk already ditatict negative value in JK Flip-Flop, no need to add not on clk here
 
 assign QA = Q[0];
 assign QB = Q[1];
