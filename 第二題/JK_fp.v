@@ -29,35 +29,12 @@ assign Q = q;
 assign Q_bar = ~q;
 
 // Sol1
-// always @(negedge clk or posedge Preset or posedge Clear) begin
-//         case({Preset,Clear})
-//             2'b11: q <= q;      // nothing change
-//             2'b01: q <= 1'b0;   // Clear Mode:Q is cleared to 0
-//             2'b10: q <= 1'b1;
-//             2'b00: begin
-//                 case({J, K})
-//                     2'b00: q <= q; // Hold
-//                     2'b01: q <= 1'b0; // Reset
-//                     2'b10: q <= 1'b1; // Set
-//                     2'b11: q <= ~q; // Toggle
-//                 endcase
-//             end
-//         endcase
-//         end
-// endmodule
-
-// Sol2
-always @(*) begin
-    case({Preset, Clear})
-        2'b11: q <= q;      // nothing change
-        2'b01: q <= 1'b0;   // Clear Mode:Q is cleared to 0
-        2'b10: q <= 1'b1;
-    endcase
-end
-
-always @(negedge clk) begin
+always @(negedge clk or posedge Preset or posedge Clear) begin
         case({Preset,Clear})
-            2'd0: begin
+            2'b11: q <= q;      // nothing change
+            2'b01: q <= 1'b0;   // Clear Mode:Q is cleared to 0
+            2'b10: q <= 1'b1;
+            2'b00: begin
                 case({J, K})
                     2'b00: q <= q; // Hold
                     2'b01: q <= 1'b0; // Reset
@@ -68,3 +45,26 @@ always @(negedge clk) begin
         endcase
         end
 endmodule
+
+// Sol2 Fake Curcuit, realize will have Latch
+// always @(*) begin
+//     case({Preset, Clear})
+//         2'b11: q <= q;      // nothing change
+//         2'b01: q <= 1'b0;   // Clear Mode:Q is cleared to 0
+//         2'b10: q <= 1'b1;
+//     endcase
+// end
+
+// always @(negedge clk) begin
+//         case({Preset,Clear})
+//             2'd0: begin
+//                 case({J, K})
+//                     2'b00: q <= q; // Hold
+//                     2'b01: q <= 1'b0; // Reset
+//                     2'b10: q <= 1'b1; // Set
+//                     2'b11: q <= ~q; // Toggle
+//                 endcase
+//             end
+//         endcase
+//         end
+// endmodule
